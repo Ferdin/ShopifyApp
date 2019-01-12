@@ -17,7 +17,9 @@ class CollectionTableViewController: UITableViewController {
     
     let collectionModel = CollectionModel()
     
+    var arrays : [String] = []
     
+//
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,25 +30,33 @@ class CollectionTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         getCollections(url: SHOPIFY_URL)
-        //print(collectionModel.title)
+       
+        print(arrays)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    //    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    //
-    //    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return collectionModel.title.count;
+        return arrays.count;
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
     }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
+        cell.textLabel?.text = arrays[indexPath.row]
+        
+        return cell
+        
+    }
+    
+   
+    
     
     func getCollections(url : String){
         
@@ -69,11 +79,15 @@ class CollectionTableViewController: UITableViewController {
         
         let counts = json["custom_collections"].count
         print(counts)
-        for count in 0...counts {
+        for count in 0...(counts - 1) {
             collectionModel.title.append(json["custom_collections"][count]["title"].stringValue)
             
         }
         print(collectionModel.title)
+        
+        arrays = collectionModel.title
+        
+        tableView.reloadData()
         
         
     }
