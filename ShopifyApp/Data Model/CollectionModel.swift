@@ -11,5 +11,6 @@ import Foundation
 class CollectionModel{
     
     var title : [String] = []
+    var ids : [String] = []
     
 }

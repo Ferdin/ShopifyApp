@@ -17,45 +17,59 @@ class CollectionTableViewController: UITableViewController {
     
     let collectionModel = CollectionModel()
     
-    var arrays : [String] = []
+    var arrayCollections : [String] = []
     
+    var arrayCollectionIDs : [String] = []
 //
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
+     
         getCollections(url: SHOPIFY_URL)
        
-        print(arrays)
+        print(arrayCollections)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    //MARK: - TableView Methods
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrays.count;
+        return arrayCollections.count;
     }
     
-    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        
-    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+     
+        performSegue(withIdentifier: "goToCollections", sender: self)
+    
+        }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        cell.textLabel?.text = arrays[indexPath.row]
+        cell.textLabel?.text = arrayCollections[indexPath.row]
         
         return cell
         
     }
     
-   
+    //MARK: - Prepare Segue
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! DetailsTableViewController
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            
+            destinationVC.collection_id = arrayCollectionIDs[indexPath.row]
+            
+        }
+        
+    }
+    
+    //MARK: - Networking with Alamofire
     
     
     func getCollections(url : String){
@@ -81,11 +95,15 @@ class CollectionTableViewController: UITableViewController {
         print(counts)
         for count in 0...(counts - 1) {
             collectionModel.title.append(json["custom_collections"][count]["title"].stringValue)
-            
+            collectionModel.ids.append(json["custom_collections"][count]["id"].stringValue)
         }
         print(collectionModel.title)
         
-        arrays = collectionModel.title
+        arrayCollections = collectionModel.title
+        
+        arrayCollectionIDs = collectionModel.ids
+        
+        print(arrayCollectionIDs)
         
         tableView.reloadData()
         

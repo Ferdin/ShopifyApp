@@ -34,7 +34,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Collection" id="FeJ-g0-AM8"/>
                     <connections>
-                        <segue destination="p6I-bY-D2u" kind="show" id="vUK-Hm-NO5"/>
+                        <segue destination="p6I-bY-D2u" kind="show" identifier="goToCollections" id="vUK-Hm-NO5"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GjR-gK-WgZ" userLabel="First Responder" sceneMemberID="firstResponder"/>

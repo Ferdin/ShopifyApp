@@ -8,13 +8,21 @@
 
 import UIKit
 
+
+struct cellData{
+    var opened = Bool()
+    var title = String()
+    var sectionData = [String]()
+}
+
 class DetailsTableViewController: UITableViewController {
 
+    var collection_id = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-      
+      print(collection_id)
     }
 
     override func didReceiveMemoryWarning() {
