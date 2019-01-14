@@ -10,7 +10,10 @@ import Foundation
 
 class CollectionModel{
     
-    var title : [String] = []
     var ids : [String] = []
+    var title : [String] = []
+    
+    var productIDs : [String] = []
+    var productTitle : [String] = []
     
 }

@@ -80,7 +80,7 @@ class CollectionTableViewController: UITableViewController {
             if(response.result.isSuccess){
                 let customJSON : JSON = JSON(response.result.value!)
                 self.jsonParse(json: customJSON)
-                //print(customJSON)
+               // print(customJSON)
             }else{
                 print("Error")
             }
@@ -92,18 +92,18 @@ class CollectionTableViewController: UITableViewController {
     func jsonParse(json : JSON){
         
         let counts = json["custom_collections"].count
-        print(counts)
+        //print(counts)
         for count in 0...(counts - 1) {
             collectionModel.title.append(json["custom_collections"][count]["title"].stringValue)
             collectionModel.ids.append(json["custom_collections"][count]["id"].stringValue)
         }
-        print(collectionModel.title)
+        //print(collectionModel.title)
         
         arrayCollections = collectionModel.title
         
         arrayCollectionIDs = collectionModel.ids
         
-        print(arrayCollectionIDs)
+        //print(arrayCollectionIDs)
         
         tableView.reloadData()
         
