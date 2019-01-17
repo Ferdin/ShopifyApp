@@ -11,30 +11,66 @@ import Alamofire
 import SwiftyJSON
 
 struct cellData{
-    var opened = Bool()
-    var title = String()
-    var sectionData = [String]()
+    let image : String
+    let title : String
+    
+    init(dictionary : [String : String]) {
+        self.image = dictionary["image"] ?? ""
+        self.title = dictionary["title"] ?? ""
+    }
 }
 
 class DetailsTableViewController: UITableViewController {
 
+    var activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView()
+    
     var collection_id = String()
     var productIDArray = [String]()
     var productTitleArray = [String]()
-    
-    var productID = String()
+    var productVariantArray = [String]()
+    var productImageArray = [String]()
+    var productID :String = ""
     var productTitles = String()
     let collectionModel = CollectionModel()
+    
+    var data = [cellData]()
+    
+    var rowNum : Int = 0
+    var selectedJSON = JSON()
+    
+    var collectionArray : [CollectionModel] = [CollectionModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         getCollections(collectionID: collection_id)
-        //getProductNames()
+        
+        self.tableView.register(CustomCell.self, forCellReuseIdentifier: "custom")
+        
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.tableView.estimatedRowHeight = 200
+        //data = [cellData.init(image: UIImage(named : productImageArray), title: "Gell")]
+        //getProductNames() - Not Worked
+     
+//        activityIndicator.center = self.view.center
+//        activityIndicator.hidesWhenStopped = true
+//        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+//        view.addSubview(activityIndicator)
+//
+//        activityIndicator.startAnimating()
+//        UIApplication.shared.beginIgnoringInteractionEvents()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        getProductNames()
+       // getProductNames() -- Worked
+        
+//        activityIndicator.stopAnimating()
+//
+//        UIApplication.shared.endIgnoringInteractionEvents()
+        
+        
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -45,9 +81,22 @@ class DetailsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "detailCells", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "custom", for: indexPath) as! CustomCell
         
-        cell.textLabel?.text = productTitleArray[indexPath.row]
+        
+        
+        let url = URL(string: productImageArray[indexPath.row])
+        
+        let data = try? Data(contentsOf: url!)
+        
+        cell.imageUI = UIImage(data: data!)
+        
+        cell.title = productTitleArray[indexPath.row]
+        
+        cell.layoutSubviews()
+        //cell.imageUI = UIImage(named : productImageArray[indexPath.row])
+        
+        //cell.textLabel?.text = productTitleArray[indexPath.row]
         
         return cell
         
@@ -58,9 +107,10 @@ class DetailsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        //productID = productIDArray[indexPath.row]
-        
+        //print(productImageArray[indexPath.row])
+        //rowNum = indexPath.row
+        //print(rowNum)
+       // getVariantQuantities(row : rowNum)
     }
     
     //MARK: - Networking Methods
@@ -76,8 +126,7 @@ class DetailsTableViewController: UITableViewController {
                 print("Error")
             }
         }
-        
-        
+      
         //getProductNames()
     }
     
@@ -91,7 +140,6 @@ class DetailsTableViewController: UITableViewController {
                 }else{
                     print("Error")
                 }
-            
         }
         
     }
@@ -113,24 +161,97 @@ class DetailsTableViewController: UITableViewController {
        
         print(productID)
         
+        getProductNames()
+        
         tableView.reloadData()
     }
     
     func parseJSONProducts(json : JSON){
         
-        let count = json["products"].count
-
-        for count in 0...(count - 1){
-            collectionModel.productTitle.append(json["products"][count]["title"].stringValue)
-        }
+        selectedJSON = json
         
+        let countProducts = json["products"].count
+        
+        
+        for countProducts in 0...(countProducts - 1){
+            collectionModel.productTitle.append(json["products"][countProducts]["title"].stringValue)
+            
+        }
+       
         productTitleArray = collectionModel.productTitle
         
-        print(productTitleArray)
+        print(collectionModel.productVariants)
+        //print(countVariants)
+        //print(productTitleArray)
+        // Sum of all quanitities in an array across all variants
+       
+        let counts : Int = productTitleArray.count
+
+        for counts in 0...(counts - 1){
+
+            getVariantQuantities(row: counts)
+            
+        }
+        getImageURL()
+        print(counts)
         
+        
+        
+//        getVariantQuantities(row: 2)
         tableView.reloadData()
         
     }
     
+    
+   // make up everything prior to the function call
+    func getVariantQuantities(row : Int){
+        
+        let countVariants = selectedJSON["products"][row]["variants"].count
+        
+        //var tableViewData = [cellData]()
+        
+        for i in 0...(countVariants - 1){
+          collectionModel.productVariants.append(selectedJSON["products"][row]["variants"][i]["title"].stringValue)
+        }
+        
+       // productVariantArray = collectionModel.productVariants
 
+    //    print("Row \(row) has \(countVariants) variants - \(collectionModel.productVariants.difference(from: collectionModel.productVariants))")
+//        
+       //  print(collectionModel.productVariants)
+    }
+    
+    func getImageURL(){
+        
+        let countVariants = productTitleArray.count
+        
+        
+        for count in 0..<countVariants{
+            collectionModel.productImageURL.append(selectedJSON["products"][count]["image"]["src"].stringValue)
+//            collectionModel.productImageURL = selectedJSON["products"][count]["image"]["src"].stringValue
+//            print(collectionModel.productImageURL)
+//            collectionArray.append(collectionModel)
+            
+        }
+//        for count in 0..<countVariants{
+//                print(collectionArray[count].productImageURL)
+//        }
+        
+        print(collectionModel.productImageURL)
+        
+        productImageArray = collectionModel.productImageURL
+    }
+    
+    
+    //MARK: - Miscellaneous Methods
+ 
+
+}
+
+extension Array where Element: Hashable {
+    func difference(from other: [Element]) -> [Element] {
+        let thisSet = Set(self)
+        let otherSet = Set(other)
+        return Array(thisSet.symmetricDifference(otherSet))
+    }
 }

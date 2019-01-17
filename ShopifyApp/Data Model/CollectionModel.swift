@@ -15,5 +15,7 @@ class CollectionModel{
     
     var productIDs : [String] = []
     var productTitle : [String] = []
+    var productImageURL : [String] = []
+    var productVariants : [String] = []
     
 }

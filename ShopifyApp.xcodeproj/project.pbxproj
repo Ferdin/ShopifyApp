@@ -15,6 +15,7 @@
 		B261CD6921E9A97B00CFB82F /* CollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B261CD6821E9A97B00CFB82F /* CollectionTableViewController.swift */; };
 		B261CD6B21E9A99300CFB82F /* DetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B261CD6A21E9A99300CFB82F /* DetailsTableViewController.swift */; };
 		B2A05B5221E9D405004BD008 /* CollectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A05B5121E9D405004BD008 /* CollectionModel.swift */; };
+		B2CEFEA721F0106000C775EA /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEFEA621F0106000C775EA /* CustomCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		B261CD6821E9A97B00CFB82F /* CollectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTableViewController.swift; sourceTree = "<group>"; };
 		B261CD6A21E9A99300CFB82F /* DetailsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsTableViewController.swift; sourceTree = "<group>"; };
 		B2A05B5121E9D405004BD008 /* CollectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionModel.swift; sourceTree = "<group>"; };
+		B2CEFEA621F0106000C775EA /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				B2A05B5121E9D405004BD008 /* CollectionModel.swift */,
+				B2CEFEA621F0106000C775EA /* CustomCell.swift */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			files = (
 				B2A05B5221E9D405004BD008 /* CollectionModel.swift in Sources */,
 				B261CD5421E9A51E00CFB82F /* AppDelegate.swift in Sources */,
+				B2CEFEA721F0106000C775EA /* CustomCell.swift in Sources */,
 				B261CD6B21E9A99300CFB82F /* DetailsTableViewController.swift in Sources */,
 				B261CD6921E9A97B00CFB82F /* CollectionTableViewController.swift in Sources */,
 			);
