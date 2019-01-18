@@ -52,6 +52,8 @@ class CollectionTableViewController: UITableViewController {
         
         cell.textLabel?.text = arrayCollections[indexPath.row]
         
+        cell.textLabel?.font = UIFont(name:"Avenir", size:22)
+        
         return cell
         
     }
@@ -64,7 +66,7 @@ class CollectionTableViewController: UITableViewController {
         if let indexPath = tableView.indexPathForSelectedRow {
             
             destinationVC.collection_id = arrayCollectionIDs[indexPath.row]
-            
+            destinationVC.collection_name = arrayCollections[indexPath.row]
         }
         
     }

@@ -13,12 +13,14 @@ class CustomCell: UITableViewCell {
     
     var title : String?
     var imageUI : UIImage?
+    var collection : String?
     
     var titleView : UITextView = {
        
         var textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isScrollEnabled = false
+        textView.font = UIFont(name: "Courier", size: 20)
         return textView
         
     }()

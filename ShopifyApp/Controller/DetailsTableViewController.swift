@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
+
 struct cellData{
     let image : String
     let title : String
@@ -32,6 +33,8 @@ class DetailsTableViewController: UITableViewController {
     var productID :String = ""
     var productTitles = String()
     let collectionModel = CollectionModel()
+    var collection_name = String()
+    var productQuantity = [String]()
     
     var data = [cellData]()
     
@@ -91,7 +94,7 @@ class DetailsTableViewController: UITableViewController {
         
         cell.imageUI = UIImage(data: data!)
         
-        cell.title = productTitleArray[indexPath.row]
+        cell.title = "Name : \(productTitleArray[indexPath.row])"
         
         cell.layoutSubviews()
         //cell.imageUI = UIImage(named : productImageArray[indexPath.row])
@@ -102,17 +105,31 @@ class DetailsTableViewController: UITableViewController {
         
     }
     
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return collection_name
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return productTitleArray.count
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(productImageArray[indexPath.row])
-        //rowNum = indexPath.row
-        //print(rowNum)
-       // getVariantQuantities(row : rowNum)
+        rowNum = indexPath.row
+        print(rowNum)
+        
+        getVariantQuantities(row : rowNum)
+        
+        collectionModel.productVariants.removeAll()
+        productQuantity.removeAll()
+        
+        tableView.reloadData()
     }
     
+//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//        collectionModel.productVariants.removeAll()
+//        productQuantity.removeAll()
+//    }
     //MARK: - Networking Methods
     
     func getCollections(collectionID : String){
@@ -187,11 +204,11 @@ class DetailsTableViewController: UITableViewController {
        
         let counts : Int = productTitleArray.count
 
-        for counts in 0...(counts - 1){
-
-            getVariantQuantities(row: counts)
-            
-        }
+//        for counts in 0...(counts - 1){
+//
+//            getVariantQuantities(row: counts)
+//
+//        }
         getImageURL()
         print(counts)
         
@@ -211,14 +228,38 @@ class DetailsTableViewController: UITableViewController {
         //var tableViewData = [cellData]()
         
         for i in 0...(countVariants - 1){
-          collectionModel.productVariants.append(selectedJSON["products"][row]["variants"][i]["title"].stringValue)
+//          collectionModel.productVariants.append(selectedJSON["products"][row]["variants"][i]["title"].stringValue)
+            
+            collectionModel.productVariants.append(selectedJSON["products"][row]["variants"][i]["title"].stringValue)
+            
+            productQuantity.append(selectedJSON["products"][row]["variants"][i]["inventory_quantity"].stringValue)
+            
         }
+        
+         let productInt = productQuantity.compactMap { Int($0)!}
+         let total = productInt.reduce(0, +)
+        
+        let representation = "The total quantity is \(total) and These are the available variants : \(collectionModel.productVariants.joined(separator:","))"
+        
+        let alert = UIAlertController(title: "Quantity across all variants ", message: representation, preferredStyle: UIAlertControllerStyle.alert)
+        
+        
+        
+        //let messageFont = UIFont(name: "Avenir-Roman", size: 12.0)!
+        
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         
        // productVariantArray = collectionModel.productVariants
 
     //    print("Row \(row) has \(countVariants) variants - \(collectionModel.productVariants.difference(from: collectionModel.productVariants))")
 //        
-       //  print(collectionModel.productVariants)
+//       let countCA = collectionArray.count
+//
+//        for count in 0..<countCA{
+//                print(collectionArray[count].productVariants)
+//        }
+//
     }
     
     func getImageURL(){
