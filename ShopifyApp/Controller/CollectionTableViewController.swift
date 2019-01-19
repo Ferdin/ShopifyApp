@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import ChameleonFramework
+
 
 class CollectionTableViewController: UITableViewController {
 
@@ -24,8 +26,22 @@ class CollectionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
      
+        //self.navigationController?.hidesNavigationBarHairline = true
+        
+        //view.backgroundColor = UIColor.flatGreen()
+        
         getCollections(url: SHOPIFY_URL)
        
+        tableView.separatorStyle = .none
+        
+        tableView.layer.cornerRadius = 5;
+        
+        self.view.backgroundColor = UIColor.init(hexString: "FFA114")
+        
+        //navigationController?.navigationBar.barTintColor = UIColor.flatOrangeColorDark()
+        
+        updateNavBar(withHexCode: UIColor.flatOrangeColorDark().hexValue())
+        
         print(arrayCollections)
     }
 
@@ -52,7 +68,13 @@ class CollectionTableViewController: UITableViewController {
         
         cell.textLabel?.text = arrayCollections[indexPath.row]
         
+        cell.layer.cornerRadius = 5.0
+        
+        cell.layer.masksToBounds = true
+        
         cell.textLabel?.font = UIFont(name:"Avenir", size:22)
+        
+        cell.backgroundColor = UIColor.flatOrange().flatten()
         
         return cell
         
@@ -111,6 +133,23 @@ class CollectionTableViewController: UITableViewController {
         
         
     }
+    
+    //MARK: - NavBar SetUp Methods
+    
+    func updateNavBar(withHexCode colourHexCode : String){
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation Bar doesnot exist")
+        }
+        
+        guard let navBarColour = UIColor(hexString: colourHexCode)else { fatalError()}
+        
+        navBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn:navBarColour, isFlat:true)
+        navBar.barTintColor = navBarColour
+        //searchBar.barTintColor = navBarColour
+        navBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor(contrastingBlackOrWhiteColorOn:navBarColour, isFlat:true)]
+        
+    }
+    
     
 //    func collectionManager(){
 //

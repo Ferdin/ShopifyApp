@@ -46,6 +46,8 @@ class DetailsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.separatorStyle = .none
+        
         getCollections(collectionID: collection_id)
         
         self.tableView.register(CustomCell.self, forCellReuseIdentifier: "custom")
